@@ -8,10 +8,11 @@ var WIZARD_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', '�
 var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 var WIZARD_COUNT = 4;
-// var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
+var NAME_INPUT_MIN_VALUE = 2;
+var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 
-var getRandomInt = function (array) {
-  return Math.floor(Math.random() * (array.length - 0)) + 0;
+var getRandomItem = function (array) {
+  return array[Math.floor(Math.random() * array.length)];
 };
 
 document.querySelector('.setup-similar').classList.remove('hidden');
@@ -23,9 +24,9 @@ var generateWizards = function () {
   var wizards = [];
   for (var i = 0; i <= WIZARD_COUNT; i++) {
     var wizard = {
-      name: WIZARD_NAMES[getRandomInt(WIZARD_NAMES)] + ' ' + WIZARD_SURNAMES[getRandomInt(WIZARD_SURNAMES)],
-      coatColor: COAT_COLORS[getRandomInt(COAT_COLORS)],
-      eyesColor: EYES_COLORS[getRandomInt(EYES_COLORS)]
+      name: getRandomItem(WIZARD_NAMES) + ' ' + getRandomItem(WIZARD_SURNAMES),
+      coatColor: getRandomItem(COAT_COLORS),
+      eyesColor: getRandomItem(EYES_COLORS)
     };
     wizards.push(wizard);
   }
@@ -54,6 +55,8 @@ var renderSimilarWizards = function () {
 };
 
 renderSimilarWizards();
+
+// Открытие/закрытие окна настройки персонажа:
 
 var setupOpen = document.querySelector('.setup-open');
 var setupClose = userDialog.querySelector('.setup-close');
@@ -99,9 +102,11 @@ setupClose.addEventListener('keydown', function (evt) {
   }
 });
 
+// Валидация ввода имени персонажа.
+
 var userNameInput = userDialog.querySelector('.setup-user-name');
 
-userNameInput.addEventListener('invalid', function (evt) {
+userNameInput.addEventListener('invalid', function () {
   if (userNameInput.validity.tooShort) {
     userNameInput.setCustomValidity('Имя должно состоять минимум из 2-х символов');
   } else if (userNameInput.validity.tooLong) {
@@ -113,9 +118,31 @@ userNameInput.addEventListener('invalid', function (evt) {
 
 userNameInput.addEventListener('input', function (evt) {
   var target = evt.target;
-  if (target.value.length < 2) {
+  if (target.value.length < NAME_INPUT_MIN_VALUE) {
     target.setCustomValidity('Имя должно состоять минимум из 2-х символов');
   } else {
     target.setCustomValidity('');
   }
+});
+
+// Изменение цвета мантии, цвета глаз, цвета фаерболов персонажа по нажатию.
+
+var player = document.querySelector('.setup-wizard');
+
+var changeColor = function (subject, array) {
+  subject.style.fill = getRandomItem(array);
+};
+
+player.querySelector('.wizard-coat').addEventListener('click', function (evt) {
+  var target = evt.target;
+  changeColor(target, COAT_COLORS);
+});
+
+player.querySelector('.wizard-eyes').addEventListener('click', function (evt) {
+  var target = evt.target;
+  changeColor(target, EYES_COLORS);
+});
+
+userDialog.querySelector('.setup-fireball-wrap').addEventListener('click', function () {
+  userDialog.querySelector('.setup-fireball-wrap').style.background = getRandomItem(FIREBALL_COLORS);
 });
