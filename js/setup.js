@@ -4,11 +4,8 @@
   var userDialog = document.querySelector('.setup');
   var WIZARD_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
   var WIZARD_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-  var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-  var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
   var WIZARD_COUNT = 4;
   var NAME_INPUT_MIN_VALUE = 2;
-  var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 
   document.querySelector('.setup-similar').classList.remove('hidden');
 
@@ -20,8 +17,8 @@
     for (var i = 0; i <= WIZARD_COUNT; i++) {
       var wizard = {
         name: window.util.getRandomItem(WIZARD_NAMES) + ' ' + window.util.getRandomItem(WIZARD_SURNAMES),
-        coatColor: window.util.getRandomItem(COAT_COLORS),
-        eyesColor: window.util.getRandomItem(EYES_COLORS)
+        coatColor: window.colorize.getRandomColor(window.colorize.COAT_COLORS),
+        eyesColor: window.colorize.getRandomColor(window.colorize.EYES_COLORS)
       };
       wizards.push(wizard);
     }
@@ -32,10 +29,12 @@
 
   var renderWizard = function (wizard) {
     var wizardElement = similarWizardTemplate.cloneNode(true);
+    var wizardCoat = wizardElement.querySelector('.wizard-coat');
+    var wizardEyes = wizardElement.querySelector('.wizard-eyes');
 
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+    wizardCoat.style.fill = wizard.coatColor;
+    wizardEyes.style.fill = wizard.eyesColor;
 
     return wizardElement;
   };
@@ -50,8 +49,6 @@
   };
 
   renderSimilarWizards();
-
-  // Открытие/закрытие окна настройки персонажа:
 
   // Валидация ввода имени персонажа.
 
@@ -79,25 +76,23 @@
   // Изменение цвета мантии, цвета глаз, цвета фаерболов персонажа по нажатию.
 
   var player = document.querySelector('.setup-wizard');
-
-  var changeColor = function (subject, array) {
-    subject.style.fill = window.util.getRandomItem(array);
-  };
-
   player.querySelector('.wizard-coat').addEventListener('click', function (evt) {
     var target = evt.target;
-    changeColor(target, COAT_COLORS);
+    window.colorize.getColorize(target, window.colorize.COAT_COLORS);
   });
 
   player.querySelector('.wizard-eyes').addEventListener('click', function (evt) {
     var target = evt.target;
-    changeColor(target, EYES_COLORS);
+    window.colorize.getColorize(target, window.colorize.EYES_COLORS);
   });
 
-  userDialog.querySelector('.setup-fireball-wrap').addEventListener('click', function () {
-    userDialog.querySelector('.setup-fireball-wrap').style.background = window.util.getRandomItem(FIREBALL_COLORS);
+  var fireBall = userDialog.querySelector('.setup-fireball-wrap');
+
+  fireBall.addEventListener('click', function () {
+    window.colorize.getColorize(fireBall, window.colorize.FIREBALL_COLORS);
   });
   window.setup = {
-    userDialog: userDialog
+    userDialog: userDialog,
+    userNameInput: userNameInput
   };
 })();

@@ -3,9 +3,12 @@
 (function () {
   var setupOpen = document.querySelector('.setup-open');
   var setupClose = window.setup.userDialog.querySelector('.setup-close');
+  var submit = window.setup.userDialog.querySelector('.setup-submit');
 
   var onPopupEscPress = function (evt) {
-    window.util.isEscEvent(evt, closePopup);
+    if (document.activeElement !== window.setup.userNameInput) {
+      window.util.isEscEvent(evt, closePopup);
+    }
   };
 
   var openPopup = function () {
@@ -31,6 +34,13 @@
   });
 
   setupClose.addEventListener('keydown', function (evt) {
+    window.util.isEnterEvent(evt, closePopup());
+  });
+  submit.addEventListener('click', function () {
+    closePopup();
+  });
+
+  submit.addEventListener('keydown', function (evt) {
     window.util.isEnterEvent(evt, closePopup());
   });
 })();
