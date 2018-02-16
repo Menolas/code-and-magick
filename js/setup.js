@@ -108,6 +108,22 @@
     evt.preventDefault();
     return false;
   });
+
+  artifactsElement.addEventListener('drop', function (evt) {
+    evt.target.style.backgroundColor = '';
+    evt.target.appendChild(draggedItem);
+    evt.preventDefault();
+  });
+
+  artifactsElement.addEventListener('dragenter', function (evt) {
+    evt.target.style.backgroundColor = 'yellow';
+    evt.preventDefault();
+  });
+
+  artifactsElement.addEventListener('dragleave', function (evt) {
+    evt.target.style.backgroundColor = '';
+    evt.preventDefault();
+  });
   window.setup = {
     userDialog: userDialog,
     userNameInput: userNameInput
