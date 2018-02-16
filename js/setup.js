@@ -91,6 +91,23 @@
   fireBall.addEventListener('click', function () {
     window.colorize.getColorize(fireBall, window.colorize.FIREBALL_COLORS);
   });
+
+  var shopElement = document.querySelector('.setup-artifacts-shop');
+  var draggedItem = null;
+
+  shopElement.addEventListener('dragstart', function (evt) {
+    if (evt.target.tagName.toLowerCase() === 'img') {
+      draggedItem = evt.target;
+      evt.dataTransfer.setData('text/plain', evt.target.alt);
+    }
+  });
+
+  var artifactsElement = document.querySelector('.setup-artifacts');
+
+  artifactsElement.addEventListener('dragover', function (evt) {
+    evt.preventDefault();
+    return false;
+  });
   window.setup = {
     userDialog: userDialog,
     userNameInput: userNameInput
