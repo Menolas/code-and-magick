@@ -2,8 +2,9 @@
 
 (function () {
   var setupOpen = document.querySelector('.setup-open');
-  var setupClose = window.setup.userDialog.querySelector('.setup-close');
-  var submit = window.setup.userDialog.querySelector('.setup-submit');
+  var setupClose = document.querySelector('.setup-close');
+  var submit = document.querySelector('.setup-submit');
+  var userDialog = document.querySelector('.setup');
 
   var onPopupEscPress = function (evt) {
     if (document.activeElement !== window.setup.userNameInput) {
@@ -12,12 +13,12 @@
   };
 
   var openPopup = function () {
-    window.setup.userDialog.classList.remove('hidden');
+    userDialog.classList.remove('hidden');
     document.addEventListener('keydown', onPopupEscPress);
   };
 
   var closePopup = function () {
-    window.setup.userDialog.classList.add('hidden');
+    userDialog.classList.add('hidden');
     document.removeEventListener('keydown', onPopupEscPress);
   };
 
@@ -44,7 +45,7 @@
     window.util.isEnterEvent(evt, closePopup());
   });
 
-  var dialogHandle = window.setup.userDialog.querySelector('.upload');
+  var dialogHandle = document.querySelector('.upload');
 
   dialogHandle.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -69,8 +70,8 @@
         y: moveEvt.clientY
       };
 
-      window.setup.userDialog.style.top = (window.setup.userDialog.offsetTop - shift.y) + 'px';
-      window.setup.userDialog.style.left = (window.setup.userDialog.offsetLeft - shift.x) + 'px';
+      userDialog.style.top = (userDialog.offsetTop - shift.y) + 'px';
+      userDialog.style.left = (userDialog.offsetLeft - shift.x) + 'px';
     };
 
     var onMouseUp = function (upEvt) {
@@ -80,8 +81,8 @@
       document.removeEventListener('mouseup', onMouseUp);
 
       if (dragged) {
-        var onClickPreventDefault = function (evt) {
-          evt.preventDefault();
+        var onClickPreventDefault = function (upEvt) {
+          upEvt.preventDefault();
           dialogHandle.removeEventListener('click', onClickPreventDefault);
         };
         dialogHandle.addEventListener('click', onClickPreventDefault);
