@@ -55,41 +55,11 @@
     var wizardEyes = wizardElement.querySelector('.wizard-eyes');
 
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardCoat.style.fill = wizard.coatColor;
-    wizardEyes.style.fill = wizard.eyesColor;
+    wizardCoat.style.fill = wizard.colorCoat;
+    wizardEyes.style.fill = wizard.colorEyes;
 
     return wizardElement;
   };
-  var successHandler = function (wizards) {
-    var fragment = document.createDocumentFragment();
-    for (var i = 0; i < WIZARD_COUNT; i++) {
-      fragment.appendChild(renderWizard(wizards[i]));
-    }
-    similarListElement.appendChild(fragment);
-    userDialog.querySelector('.setup-similar').classList.remove('hidden');
-  };
-  var errorHandler = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-    node.style.position = 'absolute';
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = '30px';
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement('afterbegin', node);
-  };
-
-  window.load.loadWizards(successHandler, errorHandler);
-
-  var form = userDialog.querySelector('.setup-wizard-form');
-
-  form.addEventListener('submit', function (evt) {
-    window.upload(new FormData(form), function (response) {
-      userDialog.classList.add('hidden');
-    });
-    evt.preventDefault();
-  });
-
   // Изменение цвета мантии, цвета глаз, цвета фаерболов персонажа по нажатию.
 
   var player = document.querySelector('.setup-wizard');
@@ -153,6 +123,36 @@
 
   artifactsElement.addEventListener('dragleave', function (evt) {
     evt.target.style.backgroundColor = '';
+    evt.preventDefault();
+  });
+
+  var successHandler = function (wizards) {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < WIZARD_COUNT; i++) {
+      fragment.appendChild(renderWizard(wizards[i]));
+    }
+    similarListElement.appendChild(fragment);
+    userDialog.querySelector('.setup-similar').classList.remove('hidden');
+  };
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
+  };
+
+  window.backend.load(successHandler, errorHandler);
+
+  var form = userDialog.querySelector('.setup-wizard-form');
+
+  form.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(form), function (response) {
+      userDialog.classList.add('hidden');
+    });
     evt.preventDefault();
   });
   window.setup = {
