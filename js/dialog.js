@@ -4,7 +4,6 @@
   var setupOpen = document.querySelector('.setup-open');
   var setupClose = document.querySelector('.setup-close');
   var submit = document.querySelector('.setup-submit');
-  var userDialog = document.querySelector('.setup');
 
   var onPopupEscPress = function (evt) {
     if (document.activeElement !== window.setup.userNameInput) {
@@ -13,12 +12,12 @@
   };
 
   var openPopup = function () {
-    userDialog.classList.remove('hidden');
+    window.setup.userDialog.classList.remove('hidden');
     document.addEventListener('keydown', onPopupEscPress);
   };
 
   var closePopup = function () {
-    userDialog.classList.add('hidden');
+    window.setup.userDialog.classList.add('hidden');
     document.removeEventListener('keydown', onPopupEscPress);
   };
 
@@ -70,8 +69,8 @@
         y: moveEvt.clientY
       };
 
-      userDialog.style.top = (userDialog.offsetTop - shift.y) + 'px';
-      userDialog.style.left = (userDialog.offsetLeft - shift.x) + 'px';
+      window.setup.userDialog.style.top = (window.setup.userDialog.offsetTop - shift.y) + 'px';
+      window.setup.userDialog.style.left = (window.setup.userDialog.offsetLeft - shift.x) + 'px';
     };
 
     var onMouseUp = function (upEvt) {
@@ -81,8 +80,8 @@
       document.removeEventListener('mouseup', onMouseUp);
 
       if (dragged) {
-        var onClickPreventDefault = function (upEvt) {
-          upEvt.preventDefault();
+        var onClickPreventDefault = function (clickEvt) {
+          clickEvt.preventDefault();
           dialogHandle.removeEventListener('click', onClickPreventDefault);
         };
         dialogHandle.addEventListener('click', onClickPreventDefault);
